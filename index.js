@@ -1,11 +1,20 @@
-var http = require('http');
+var app = require('express')();
+var http = require('http').Server(app);
 
-//app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 var appPort = process.env.PORT || 5000;
 
-http.createServer(function (request, response){
-	response.writeHead(200, {'Content-Type': 'text/plain'});
-	response.end('Hello World\n');
-}).listen(appPort);
+//Route for html
+app.get('/', function(request, response){
+	response.sendFile(__dirname + '/public/index.html');
+});
 
-console.log('Server running at localhost:' + appPort);
+//Route for css
+app.get('/public/style.css', function(request, response){
+	response.sendFile(__dirname + '/public/style.css');
+});
+
+//Start node server
+http.listen(appPort, function(){
+	console.log('Server running at localhost:' + appPort);	
+});
