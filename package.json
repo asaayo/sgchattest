@@ -1,5 +1,5 @@
 {
-    "name": "SunGard Chat",
+    "name": "SGChatTest",
     "version": "0.0.1",
     "description": "Chat in 20 lines with node.js",
 	"scripts":{
