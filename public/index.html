@@ -43,7 +43,6 @@
 			var message = JSON.parse(message);
 			var line = "<li><span class='user'>" + message.user + "</span>: " + message.chatMessage + "</li>";
 			$('#messages').append(line);
-			$('body').scrollTop(('#messages')[0].scrollHeight + $('#messagediv')[0].scrollHeight);
 		});
 		
 		//Resizes the message div
@@ -51,9 +50,20 @@
 			$('#messagediv').css('height',  $(document).height() - 45 + "px")
 		};
 		
+		//Resize message div if the window is resized so scrollTop continues to work
+		$(window).resize(function(){
+			resizeFunction();
+		});
+		
+		
 		//Size the window when the application starts
 		$(document).ready(function(){
 			resizeFunction();
+			$('#messagediv').bind("DOMSubtreeModified", function(){
+				$('#messagediv').animate({
+					scrollTop: $('#messagediv')[0].scrollHeight
+				});
+			});
 		});
 	</script>
 </html>
