@@ -7,10 +7,43 @@
 	</head>
 	<body>
 		<div id="messagediv">
-			<ul id="messages"></ul>
+			<div id="innerdiv"><ul id="messages"></ul></div>
 		</div>
 		<form action="">
-			<input id="message" autocomplete="off"/><button>Send</button>
+			<input id="m" autocomplete="off"/><button>Send</button>
 		</form>
 	</body>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+		//We need a socket for data
+		var socket = io();
+		//And we need to know who's chatting
+		var whoami = prompt('Please enter your name: ', 'Mystery Guest');
+		//Let everyone know a new user has connected
+		socket.emit('statusMessage', whoami + ' connected');
+		//Receive user connect message
+		socket.on('statusMessage', function(message){
+			$('#messages').append($('<li>').text(message));
+		});
+		//Chat
+		$('form').submit(function(){
+			var message = $('#m').val();
+			var data = {
+				"chatMessage": message,
+				"user": whoami
+			};
+			socket.emit('chatMessage', JSON.stringify(data));
+			$('#m').val('');
+			//Prevents the form from refreshing the page on submit
+			return false;
+		});
+		//Printing messages
+		socket.on('chatMessage', function(message){
+			var message = JSON.parse(message);
+			var line = "<li><span class='user'>" + message.user + "</span>: " + message.chatMessage + "</li>";
+			$('#messages').append(line);
+			$('body').scrollTop(('#messages')[0].scrollHeight + $('#messagediv')[0].scrollHeight);
+		});
+	</script>
 </html>
