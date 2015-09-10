@@ -45,5 +45,15 @@
 			$('#messages').append(line);
 			$('body').scrollTop(('#messages')[0].scrollHeight + $('#messagediv')[0].scrollHeight);
 		});
+		
+		//Resizes the message div
+		function resizeFunction(){
+			$('#messagediv').css('height',  $(document).height() - 45 + "px")
+		};
+		
+		//Size the window when the application starts
+		$(document).ready(function(){
+			resizeFunction();
+		});
 	</script>
 </html>
