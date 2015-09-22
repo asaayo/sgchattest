@@ -3,7 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.set('port', (process.env.PORT || 5000));
-var appPort = process.env.PORT || 5000;
+//var appPort = process.env.PORT || 5000;
 
 //Route for html
 app.get('/', function(request, response){
@@ -28,6 +28,6 @@ io.on('connection', function(socket){
 });
 
 //Start node server
-http.listen(appPort, function(){
-	console.log('Server running at localhost:' + appPort);	
+http.listen(app.get('port'), function(){
+	console.log('Server running at localhost:' + app.locals.port);	
 });
