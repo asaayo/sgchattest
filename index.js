@@ -29,5 +29,5 @@ io.on('connection', function(socket){
 
 //Start node server
 http.listen(app.get('port'), function(){
-	console.log('Server running at localhost:' + app.locals.port);	
+	console.log('Server running at localhost:' + app.get('port'));	
 });
