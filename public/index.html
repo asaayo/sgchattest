@@ -15,11 +15,12 @@
 	</body>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="/public/chance.min.js"></script>
 	<script>
 		//We need a socket for data
 		var socket = io();
 		//And we need to know who's chatting
-		var whoami = prompt('Please enter your name: ', 'Mystery Guest');
+		var whoami = prompt('Please enter your name: ', chance.name());
 		//Let everyone know a new user has connected
 		socket.emit('statusMessage', whoami + ' connected');
 		//Receive user connect message
