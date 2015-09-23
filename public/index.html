@@ -1,33 +1,27 @@
-<!Doctype html>
+<!doctype html>
 <html>
 	<head>
-		<title>Hello Chat!</title>
+		<title>Socket.IO chat</title>
 		<link rel="stylesheet" href="public/style.css"></link>
-		
 	</head>
-	<body>
+	<body onresize="resizeFunction()">
 		<div id="messagediv">
-			<div id="innerdiv"><ul id="messages"></ul></div>
+			<div id="innderdiv"><ul id="messages"></ul></div>
 		</div>
 		<form action="">
-			<input id="m" autocomplete="off"/><button>Send</button>
+			<input id="m" autocomplete="off" /><button>Send</button>
 		</form>
 	</body>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="/public/chance.min.js"></script>
+	<script src="public/chance.min.js"></script>
 	<script>
-		//We need a socket for data
+		//We need a socket
 		var socket = io();
-		//And we need to know who's chatting
-		var whoami = prompt('Please enter your name: ', chance.name());
-		//Let everyone know a new user has connected
+		//And to know what to call this user
+		var whoami = prompt("Please enter your name", chance.name()) || chance.name();
 		socket.emit('statusMessage', whoami + ' connected');
-		//Receive user connect message
-		socket.on('statusMessage', function(message){
-			$('#messages').append($('<li>').text(message));
-		});
-		//Chat
+		//Send the chat message
 		$('form').submit(function(){
 			var message = $('#m').val();
 			var data = {
@@ -36,14 +30,20 @@
 			};
 			socket.emit('chatMessage', JSON.stringify(data));
 			$('#m').val('');
-			//Prevents the form from refreshing the page on submit
 			return false;
 		});
-		//Printing messages
+		
+		//Print received chat messages and scroll the window when necessary
 		socket.on('chatMessage', function(message){
-			var message = JSON.parse(message);
-			var line = "<li><span class='user'>" + message.user + "</span>: " + message.chatMessage + "</li>";
+			var $msgdiv = $('#messagediv');
+			message = JSON.parse(message);
+			var line = "<li> <span class='user'>" + message.user + "</span>: " + message.chatMessage + "</li>";
 			$('#messages').append(line);
+		});
+		
+		//User connect messages
+		socket.on('statusMessage', function(message){
+			$('#messages').append($('<li>').text(message))
 		});
 		
 		//Resizes the message div
